@@ -15,6 +15,7 @@ export interface StackItem {
   url?: string;
   sourceUrl?: string;
   demoUrl?: string | null;
+  companyAbout?: string;
 }
 
 interface CardStackProps {
@@ -63,10 +64,16 @@ export function CardStack({ label, items, extraButtons }: CardStackProps) {
     setActive(idx);
   }, [active, items.length, closeAllPanels]);
 
-  const togglePanel = (idx: number, type: 'desc' | 'tech') => {
-    const key = `${idx}-${type}`;
-    const other = `${idx}-${type === 'desc' ? 'tech' : 'desc'}`;
-    setPanels(prev => ({ ...prev, [other]: false, [key]: !prev[key] }));
+  const togglePanel = (idx: number, type: 'desc' | 'tech' | 'about') => {
+    const keys = ['desc', 'tech', 'about'];
+    setPanels(prev => {
+      const next = { ...prev } as Record<string, boolean>;
+      keys.forEach(k => {
+        const key = `${idx}-${k}`;
+        next[key] = k === type ? !prev[key] : false;
+      });
+      return next;
+    });
   };
 
   // Keyboard navigation
@@ -154,6 +161,12 @@ export function CardStack({ label, items, extraButtons }: CardStackProps) {
                           onClick={() => togglePanel(i, 'desc')}
                         >Description</button>
                       )}
+                      {item.companyAbout && (
+                        <button
+                          className={`pill${panels[`${i}-about`] ? ' on' : ''}`}
+                          onClick={() => togglePanel(i, 'about')}
+                        >About</button>
+                      )}
                       {item.tech && item.tech.length > 0 && (
                         <button
                           className={`pill${panels[`${i}-tech`] ? ' on' : ''}`}
@@ -161,6 +174,15 @@ export function CardStack({ label, items, extraButtons }: CardStackProps) {
                         >Tech Stack</button>
                       )}
                       {extraButtons?.(item)}
+                      {item.url && (
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="pill"
+                          style={{ textDecoration: 'none' }}
+                        >Visit</a>
+                      )}
                     </div>
 
                     {/* Desc expand */}
@@ -168,6 +190,15 @@ export function CardStack({ label, items, extraButtons }: CardStackProps) {
                       <div className={`ep${panels[`${i}-desc`] ? ' open' : ''}`}>
                         <div className="ep-inner">
                           <p className="ep-text">{item.desc}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* About expand */}
+                    {item.companyAbout && (
+                      <div className={`ep${panels[`${i}-about`] ? ' open' : ''}`}>
+                        <div className="ep-inner">
+                          <p className="ep-text">{item.companyAbout}</p>
                         </div>
                       </div>
                     )}

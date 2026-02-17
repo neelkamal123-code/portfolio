@@ -1,16 +1,9 @@
-'use client';
-
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import clsx from 'clsx';
 
-interface CardProps {
-  children: React.ReactNode;
-  className?: string;
+type CardProps = HTMLMotionProps<'div'> & {
   hover?: boolean;
-  initial?: object;
-  animate?: object;
-  transition?: object;
-}
+};
 
 export function Card({ children, className, hover = false, ...motionProps }: CardProps) {
   return (
