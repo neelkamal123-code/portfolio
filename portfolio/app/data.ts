@@ -115,9 +115,19 @@ export const certifications: StackItem[] = [
     period: 'July 2025',
     desc: 'Validates expertise in designing, building, testing, and maintaining cloud applications and services on Microsoft Azure.',
     tech: ['Azure App Services', 'Azure Functions', 'Cosmos DB', 'Storage', 'Azure AD'],
-    url: 'https://learn.microsoft.com/en-us/users/neelkamal-6249/credentials/56a3a27298d0755c?ref=https%3A%2F%2Fwww.linkedin.com%2F',
+    url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/56A3A27298D0755C?sharingId=6C0688093092B22D',
   },
-    {
+  {
+    id: 'az400',
+    name: 'Microsoft Certified: DevOps Engineer Expert',
+    accent: true,
+    sub: 'Microsoft',
+    period: '2025',
+    desc: 'Validates expertise in designing and implementing DevOps practices on Azure, including CI/CD, source control, infrastructure, and monitoring.',
+    tech: ['Azure DevOps', 'GitHub Actions', 'CI/CD', 'Infrastructure as Code', 'Monitoring'],
+    url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/8EA3B2152C8292E9?sharingId=6C0688093092B22D',
+  },
+  {
     id: 'ai102',
     name: 'Microsoft Certified: Azure AI Engineer Associate',
     accent: true,
@@ -125,7 +135,7 @@ export const certifications: StackItem[] = [
     period: 'February 2026',
     desc: 'Demonstrates skills in designing and implementing AI solutions using Azure Cognitive Services, Azure OpenAI, and ML services.',
     tech: ['Azure AI Services', 'Cognitive Services', 'Azure OpenAI', 'ML Solutions'],
-    url: 'https://learn.microsoft.com/en-us/users/neelkamal-6249/credentials/certification/azure-ai-engineer?tab=credentials-tab',
+    url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/2C84E1553222784E?sharingId=6C0688093092B22D',
   },
   {
     id: 'az900',
@@ -135,7 +145,7 @@ export const certifications: StackItem[] = [
     period: 'April 2025',
     desc: 'Foundational certification covering Azure cloud concepts, core services, security, compliance, and pricing.',
     tech: ['Cloud Concepts', 'Azure Core Services', 'Security', 'Governance'],
-    url: 'https://learn.microsoft.com/en-us/users/neelkamal-6249/credentials/certification/azure-fundamentals?tab=credentials-tab',
+    url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/34D5D0A9EAF50288?sharingId=6C0688093092B22D',
   },
   {
     id: 'pythonml',

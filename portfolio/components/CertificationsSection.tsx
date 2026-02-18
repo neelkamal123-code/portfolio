@@ -6,6 +6,7 @@ export function CertificationsSection() {
     <CardStack
       label="Certifications"
       items={certifications}
+      showVisitButton={false}
       extraButtons={(item) => (
         <a href={item.url || '#'} target="_blank" rel="noopener noreferrer" className="pill">
           View Credential ↗

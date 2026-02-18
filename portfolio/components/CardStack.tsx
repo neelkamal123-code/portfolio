@@ -22,6 +22,7 @@ interface CardStackProps {
   label: string;
   items: StackItem[];
   extraButtons?: (item: StackItem) => React.ReactNode;
+  showVisitButton?: boolean;
 }
 
 const POS: Record<number, React.CSSProperties> = {
@@ -47,7 +48,7 @@ const chipI = {
   show:   { opacity: 1, y: 0, transition: { duration: 0.26, ease: [0,0,0.2,1] as [number,number,number,number] } },
 };
 
-export function CardStack({ label, items, extraButtons }: CardStackProps) {
+export function CardStack({ label, items, extraButtons, showVisitButton = true }: CardStackProps) {
   const [active, setActive] = useState(0);
   const [panels, setPanels] = useState<Record<string, boolean>>({});
   const stackRef = useRef<HTMLDivElement>(null);
@@ -174,14 +175,14 @@ export function CardStack({ label, items, extraButtons }: CardStackProps) {
                         >Tech Stack</button>
                       )}
                       {extraButtons?.(item)}
-                      {item.url && (
+                      {showVisitButton && item.url && (
                         <a
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="pill"
                           style={{ textDecoration: 'none' }}
-                        >Visit</a>
+                        >Visit ↗</a>
                       )}
                     </div>
 
