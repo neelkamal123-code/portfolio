@@ -50,9 +50,12 @@ const chipI = {
 export function CardStack({ label, items, extraButtons, showVisitButton = true }: CardStackProps) {
   const [active, setActive] = useState(0);
   const [panels, setPanels] = useState<Record<string, boolean>>({});
+  const [hasInteracted, setHasInteracted] = useState(false);
   const stackRef = useRef<HTMLDivElement>(null);
   const touchX = useRef(0);
+  const touchY = useRef(0);
   const touchT = useRef(0);
+  const touchMode = useRef<'idle' | 'undecided' | 'horizontal' | 'vertical'>('idle');
   const mouseX = useRef(0);
   const mouseT = useRef(0);
   const mouseDown = useRef(false);
@@ -67,6 +70,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
     if (idx < 0 || idx >= items.length || idx === active) return;
     closeAllPanels();
     setActive(idx);
+    setHasInteracted(true);
   }, [active, items.length, closeAllPanels]);
 
   const togglePanel = (idx: number, type: 'desc' | 'tech' | 'about') => {
@@ -89,13 +93,39 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
       <div
         ref={stackRef}
         tabIndex={-1}
-        style={{ position: 'relative', perspective: 1400, perspectiveOrigin: '50% 60%', paddingBottom: 52 }}
-        onTouchStart={e => { touchX.current = e.touches[0].clientX; touchT.current = Date.now(); }}
+        style={{ position: 'relative', perspective: 1400, perspectiveOrigin: '50% 60%', paddingBottom: 52, touchAction: 'pan-y' }}
+        onTouchStart={e => {
+          touchX.current = e.touches[0].clientX;
+          touchY.current = e.touches[0].clientY;
+          touchT.current = Date.now();
+          touchMode.current = 'undecided';
+        }}
+        onTouchMove={e => {
+          const dx = e.touches[0].clientX - touchX.current;
+          const dy = e.touches[0].clientY - touchY.current;
+          const absX = Math.abs(dx);
+          const absY = Math.abs(dy);
+
+          if (touchMode.current === 'undecided' && (absX > 10 || absY > 10)) {
+            touchMode.current = absX > absY * 1.1 ? 'horizontal' : 'vertical';
+          }
+
+          if (touchMode.current === 'horizontal') {
+            e.preventDefault();
+          }
+        }}
         onTouchEnd={e => {
+          if (touchMode.current !== 'horizontal') {
+            touchMode.current = 'idle';
+            return;
+          }
+
           const dx = e.changedTouches[0].clientX - touchX.current;
           const vel = Math.abs(dx) / (Date.now() - touchT.current);
-          if (Math.abs(dx) > 40 || (Math.abs(dx) > 18 && vel > 0.35)) goTo(active + (dx < 0 ? 1 : -1));
+          if (Math.abs(dx) > 26 || (Math.abs(dx) > 14 && vel > 0.22)) goTo(active + (dx < 0 ? 1 : -1));
+          touchMode.current = 'idle';
         }}
+        onTouchCancel={() => { touchMode.current = 'idle'; }}
         onMouseDown={e => {
           mouseDown.current = true;
           mouseX.current = e.clientX;
@@ -143,6 +173,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
           return (
             <div
               key={item.id}
+              onClick={!isActive ? () => goTo(i) : undefined}
               style={{
                 ...POS[pos],
                 inlineSize: '100%',
@@ -150,7 +181,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                 transition: 'transform 420ms cubic-bezier(0.32,0.72,0,1), opacity 420ms cubic-bezier(0,0,0.2,1)',
                 transformOrigin: 'center 110%',
                 willChange: 'transform, opacity',
-                cursor: 'default',
+                cursor: isActive ? 'default' : 'pointer',
               }}
             >
               <div
@@ -268,7 +299,50 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
             </div>
           );
         })}
+
+        {!hasInteracted && items.length > 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 0.95, y: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            style={{
+              position: 'absolute',
+              bottom: 8,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              pointerEvents: 'none',
+              zIndex: 30,
+            }}
+          >
+            <motion.div
+              animate={{ x: [0, 8, 0, -8, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
+              style={{
+                fontSize: '.64rem',
+                letterSpacing: '.08em',
+                textTransform: 'uppercase',
+                color: 'rgba(188,210,232,0.9)',
+                border: '1px solid rgba(148,190,232,0.28)',
+                borderRadius: 999,
+                padding: '7px 12px',
+                background: 'rgba(8,20,40,0.72)',
+                backdropFilter: 'blur(4px)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Swipe or scroll to browse
+            </motion.div>
+          </motion.div>
+        )}
       </div>
+
+      {items.length > 1 && (
+        <div style={{ display: 'flex', gap: 7, alignItems: 'center', justifyContent: 'center', marginTop: 12 }}>
+          {items.map((_, i) => (
+            <div key={i} className={`sdot${i === active ? ' on' : ''}`} style={{ cursor: 'default' }} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
