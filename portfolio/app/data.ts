@@ -7,7 +7,7 @@ export const profile = {
   email: 'neelpunia382@gmail.com',
   github: 'https://github.com/neelkamal123-code',
   linkedin: 'https://www.linkedin.com/in/neelpunia/',
-  resumeUrl: '/resume.pdf',
+  resumeUrl: '/Neel_s_Resume_2026_1.pdf',
 };
 
 export const experience: StackItem[] = [
