@@ -21,6 +21,8 @@ body {
   font-family: 'DM Sans', system-ui, sans-serif;
   background: var(--bg); color: #D4E2F0;
   min-height: 100vh; overflow-x: hidden;
+  min-height: 100dvh;
+  -webkit-text-size-adjust: 100%;
 }
 ::selection { background: rgba(134,239,172,0.14); color: #ECF4FF; }
 ::-webkit-scrollbar { width: 2px; }
@@ -193,14 +195,14 @@ body {
 .liquid-dot-dock {
   display: flex;
   justify-content: center;
-  gap: 1px;
+  gap: 6px;
   align-items: center;
 }
 .liquid-dot-btn {
   background: none;
   border: none;
-  width: 14px;
-  height: 14px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   margin: 0;
   display: inline-flex;
