@@ -49,7 +49,7 @@ export default function PortfolioClient() {
   const [tab, setTab] = useState<Tab>('profile');
 
   return (
-    <div style={{ minHeight: '100dvh', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', position: 'relative' }}>
       <Starfield />
 
       {[
@@ -78,14 +78,7 @@ export default function PortfolioClient() {
 
       <Nav activeTab={tab} onTabChange={t => setTab(t as Tab)} />
 
-      <main
-        style={{
-          position: 'relative',
-          zIndex: 10,
-          paddingTop: 'calc(76px + env(safe-area-inset-top, 0px))',
-          paddingBottom: 'calc(120px + env(safe-area-inset-bottom, 0px))',
-        }}
-      >
+      <main style={{ position: 'relative', zIndex: 10, paddingTop: 76, paddingBottom: 80 }}>
         <AnimatePresence mode="wait">
           <motion.div key={tab} variants={pv} initial="initial" animate="enter" exit="exit">
             {pages[tab]}
@@ -95,19 +88,11 @@ export default function PortfolioClient() {
 
       <footer
         style={{
-          position: 'fixed',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 20,
-          maxWidth: 560,
+          position: 'relative',
+          zIndex: 10,
+          maxWidth: 520,
           margin: '0 auto',
-          padding: tab === 'profile'
-            ? '8px 22px calc(16px + env(safe-area-inset-bottom, 0px))'
-            : '12px 22px calc(16px + env(safe-area-inset-bottom, 0px))',
-          background: 'linear-gradient(to top, rgba(5,8,16,0.95) 45%, rgba(5,8,16,0))',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
+          padding: tab === 'profile' ? '0 22px 32px' : '10px 22px 32px',
         }}
       >
         <LiquidPageDock tabs={tabs} activeTab={tab} onTabChange={t => setTab(t as Tab)} />

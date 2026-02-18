@@ -18,19 +18,7 @@ export function Nav({ activeTab, onTabChange }: { activeTab:string; onTabChange:
 
   return (
     <>
-      <header
-        style={{
-          position:'fixed',
-          top:0,
-          left:0,
-          right:0,
-          zIndex:100,
-          display:'flex',
-          alignItems:'center',
-          height:'calc(64px + env(safe-area-inset-top, 0px))',
-          padding:'env(safe-area-inset-top, 0px) 40px 0',
-        }}
-      >
+      <header style={{ position:'fixed', top:0, left:0, right:0, zIndex:100, display:'flex', alignItems:'center', height:64, padding:'0 40px' }}>
         <nav className="hidden md:flex items-center gap-8">
           {TABS.map(t => (
             <button key={t.id} onClick={() => go(t.id)} className={`nav-btn${activeTab===t.id?' active':''}`}>{t.label}</button>

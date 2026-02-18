@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 
@@ -10,12 +10,6 @@ export const metadata: Metadata = {
     description: 'Software Engineer II at Deloitte specializing in .NET Core, Azure cloud solutions, and scalable enterprise application development.',
     type: 'website',
   },
-};
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  viewportFit: 'cover',
 };
 
 export default function RootLayout({
