@@ -35,6 +35,17 @@ export const experience: StackItem[] = [
     url: 'https://www.petmojo.care/',
     companyAbout: 'Platform connecting pet owners with at-home pet care providers and services.',
     tech: ['Flutter', 'Dart', 'Firebase', 'REST APIs', 'Provider', 'Git', 'Figma']
+  },
+  {
+    id: 'settyl',
+    name: 'Settyl',
+    accent: false,
+    sub: 'Full Stack Flutter Developer',
+    period: 'March 2022 â€” May 2022',
+    desc: 'Handled regular app updates and feature improvements for the company application. Worked on API integration, state management, backend development with Node.js, and Dio client implementation. Collaborated through GitHub workflows on a daily basis while delivering production-ready changes.',
+    url: 'https://www.settyl.com',
+    companyAbout: 'Enterprise Business Management Platform focused on S2P, P2P, Domestic, and EXIM workflows. Powered by Lasya AI to automate business operations across web and voice channels, with a mission of inclusive digital growth for all.',
+    tech: ['Flutter', 'Dart', 'Node.js', 'REST APIs', 'Dio', 'State Management', 'GitHub']
   }
 ];
 
@@ -91,22 +102,52 @@ export const projects: StackItem[] = [
     demoUrl: '#',
   },  
   {
-    id: 'driftdb', name: 'DriftDB', accent: true,
-    sub: 'Edge Key-Value Store', period: 'Rust · SQLite · WASM',
-    desc: 'Embedded key-value store compiled to WebAssembly. Runs on Cloudflare Workers with <2ms read latency.',
-    tech: ['Rust','WebAssembly','SQLite','Cloudflare Workers'],
-    sourceUrl: '#', demoUrl: null,
+    id: 'pingpong',
+    name: 'Ping Pong Game',
+    accent: true,
+    sub: 'Python · Turtle Graphics',
+    period: '2026 — Present',
+    desc: 'A 2-player desktop Ping Pong game built using Python Turtle. Includes smooth paddle controls, real-time score tracking, pause/resume, restart, quit shortcuts, center divider UI, and a first-to-7 win system. Gameplay difficulty increases over time with dynamic ball speed scaling after paddle collisions.',
+    tech: ['Python', 'Turtle', 'time', 'Git', 'GitHub'],
+    sourceUrl: 'https://github.com/neelkamal123-code/python-pingpong',
+    demoUrl: '#',
   },
   {
-    id: 'flightplan', name: 'Flightplan', accent: true,
-    sub: 'AI Terminal Planner', period: 'Python · LLM · CLI',
-    desc: 'Converts natural language into executable shell scripts using chain-of-thought prompting. 4.8k GitHub stars.',
-    tech: ['Python','OpenAI API','Click','Rich'],
-    sourceUrl: '#', demoUrl: null,
+    id: 'djangoecom',
+    name: 'Django E-commerce',
+    accent: true,
+    sub: 'Full-Stack Web Store',
+    period: 'Django · Python · SQLite',
+    desc: 'A Django-based e-commerce app with product catalog, cart management, customer auth, checkout-to-order flow, and admin CRUD support.',
+    tech: ['Python', 'Django', 'SQLite', 'Bootstrap', 'Pillow'],
+    sourceUrl: 'https://github.com/neelkamal123-code/python-django-ecommerce',
+    demoUrl: null,
   },
+    {
+    id: 'djangoecom',
+    name: 'Django E-commerce',
+    accent: true,
+    sub: 'Full-Stack Web Store',
+    period: 'Django · Python · SQLite',
+    desc: 'A Django-based e-commerce app with product catalog, cart management, customer auth, checkout-to-order flow, and admin CRUD support.',
+    tech: ['Python', 'Django', 'SQLite', 'Bootstrap', 'Pillow'],
+    sourceUrl: 'https://github.com/neelkamal123-code/python-django-ecommerce',
+    demoUrl: null,
+  },
+
 ];
 
 export const certifications: StackItem[] = [
+    {
+    id: 'az400',
+    name: 'Microsoft Certified: DevOps Engineer Expert',
+    accent: true,
+    sub: 'Microsoft',
+    period: '2025',
+    desc: 'Validates expertise in designing and implementing DevOps practices on Azure, including CI/CD, source control, infrastructure, and monitoring.',
+    tech: ['Azure DevOps', 'GitHub Actions', 'CI/CD', 'Infrastructure as Code', 'Monitoring'],
+    url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/8EA3B2152C8292E9?sharingId=6C0688093092B22D',
+  },
   {
     id: 'az204',
     name: 'Microsoft Certified: Azure Developer Associate',
@@ -116,16 +157,6 @@ export const certifications: StackItem[] = [
     desc: 'Validates expertise in designing, building, testing, and maintaining cloud applications and services on Microsoft Azure.',
     tech: ['Azure App Services', 'Azure Functions', 'Cosmos DB', 'Storage', 'Azure AD'],
     url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/56A3A27298D0755C?sharingId=6C0688093092B22D',
-  },
-  {
-    id: 'az400',
-    name: 'Microsoft Certified: DevOps Engineer Expert',
-    accent: true,
-    sub: 'Microsoft',
-    period: '2025',
-    desc: 'Validates expertise in designing and implementing DevOps practices on Azure, including CI/CD, source control, infrastructure, and monitoring.',
-    tech: ['Azure DevOps', 'GitHub Actions', 'CI/CD', 'Infrastructure as Code', 'Monitoring'],
-    url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/8EA3B2152C8292E9?sharingId=6C0688093092B22D',
   },
   {
     id: 'ai102',
