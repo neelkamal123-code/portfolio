@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Nav } from '@/components/Nav';
 import { Starfield } from '@/components/Starfield';
@@ -48,9 +48,15 @@ const pv = {
 
 export default function PortfolioClient() {
   const [tab, setTab] = useState<Tab>('profile');
+  const [isLinkedInInApp, setIsLinkedInInApp] = useState(false);
+
+  useEffect(() => {
+    const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+    setIsLinkedInInApp(/LinkedInApp|LIAPP/i.test(ua));
+  }, []);
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative' }}>
+    <div style={{ minHeight: '100dvh', position: 'relative' }}>
       <Starfield />
 
       {[
@@ -80,7 +86,14 @@ export default function PortfolioClient() {
       <Nav activeTab={tab} onTabChange={t => setTab(t as Tab)} />
       <InAppBrowserNotice />
 
-      <main style={{ position: 'relative', zIndex: 10, paddingTop: 76, paddingBottom: 80 }}>
+      <main
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          paddingTop: isLinkedInInApp ? 84 : 76,
+          paddingBottom: isLinkedInInApp ? 150 : 118,
+        }}
+      >
         <AnimatePresence mode="wait">
           <motion.div key={tab} variants={pv} initial="initial" animate="enter" exit="exit">
             {pages[tab]}
@@ -90,11 +103,17 @@ export default function PortfolioClient() {
 
       <footer
         style={{
-          position: 'relative',
-          zIndex: 10,
-          maxWidth: 520,
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: isLinkedInInApp ? 52 : 0,
+          zIndex: 20,
+          maxWidth: 560,
           margin: '0 auto',
-          padding: tab === 'profile' ? '0 22px 32px' : '10px 22px 32px',
+          padding: tab === 'profile' ? '8px 22px 16px' : '12px 22px 16px',
+          background: 'linear-gradient(to top, rgba(5,8,16,0.96) 50%, rgba(5,8,16,0))',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
         }}
       >
         <LiquidPageDock tabs={tabs} activeTab={tab} onTabChange={t => setTab(t as Tab)} />

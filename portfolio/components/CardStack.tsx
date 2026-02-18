@@ -94,7 +94,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
       <div
         ref={stackRef}
         tabIndex={-1}
-        style={{ position: 'relative', perspective: 1400, perspectiveOrigin: '50% 60%', paddingBottom: 52, touchAction: 'pan-y' }}
+        style={{ position: 'relative', perspective: 1400, perspectiveOrigin: '50% 60%', paddingBottom: 76, touchAction: 'pan-y' }}
         onTouchStart={e => {
           touchX.current = e.touches[0].clientX;
           touchY.current = e.touches[0].clientY;
@@ -308,7 +308,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
             transition={{ duration: 0.35, ease: 'easeOut' }}
             style={{
               position: 'absolute',
-              bottom: 8,
+              bottom: 22,
               left: '50%',
               transform: 'translateX(-50%)',
               pointerEvents: 'none',
