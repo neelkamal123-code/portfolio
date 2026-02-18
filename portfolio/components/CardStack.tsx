@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface StackItem {
   id: string;
@@ -54,6 +53,11 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
   const stackRef = useRef<HTMLDivElement>(null);
   const touchX = useRef(0);
   const touchT = useRef(0);
+  const mouseX = useRef(0);
+  const mouseT = useRef(0);
+  const mouseDown = useRef(false);
+  const wheelCarry = useRef(0);
+  const wheelLockUntil = useRef(0);
 
   const closeAllPanels = useCallback(() => {
     setPanels({});
@@ -77,18 +81,6 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
     });
   };
 
-  // Keyboard navigation
-  useEffect(() => {
-    const el = stackRef.current;
-    if (!el) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(active + 1);
-      if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(active - 1);
-    };
-    el.addEventListener('keydown', onKey);
-    return () => el.removeEventListener('keydown', onKey);
-  }, [active, goTo]);
-
   return (
     <div style={{ width: '100%', maxWidth: 520, margin: '0 auto', padding: '0 22px' }}>
       <p className="section-lbl">{label}</p>
@@ -104,6 +96,45 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
           const vel = Math.abs(dx) / (Date.now() - touchT.current);
           if (Math.abs(dx) > 40 || (Math.abs(dx) > 18 && vel > 0.35)) goTo(active + (dx < 0 ? 1 : -1));
         }}
+        onMouseDown={e => {
+          mouseDown.current = true;
+          mouseX.current = e.clientX;
+          mouseT.current = Date.now();
+        }}
+        onMouseUp={e => {
+          if (!mouseDown.current) return;
+          mouseDown.current = false;
+          const dx = e.clientX - mouseX.current;
+          const vel = Math.abs(dx) / (Date.now() - mouseT.current);
+          if (Math.abs(dx) > 40 || (Math.abs(dx) > 18 && vel > 0.35)) goTo(active + (dx < 0 ? 1 : -1));
+        }}
+        onMouseLeave={() => {
+          mouseDown.current = false;
+          wheelCarry.current = 0;
+        }}
+        onWheel={e => {
+          const primaryDelta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+          if (Math.abs(primaryDelta) < 12) return;
+
+          const now = Date.now();
+          wheelCarry.current += primaryDelta;
+
+          if (now < wheelLockUntil.current) {
+            e.preventDefault();
+            return;
+          }
+
+          if (Math.abs(wheelCarry.current) >= 60) {
+            const dir = wheelCarry.current > 0 ? 1 : -1;
+            const next = active + dir;
+            if (next >= 0 && next < items.length) {
+              e.preventDefault();
+              goTo(next);
+              wheelLockUntil.current = now + 260;
+            }
+            wheelCarry.current = 0;
+          }
+        }}
       >
         {items.map((item, i) => {
           const pos = getPos(i, active);
@@ -112,7 +143,6 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
           return (
             <div
               key={item.id}
-              onClick={!isActive ? () => goTo(i) : undefined}
               style={{
                 ...POS[pos],
                 inlineSize: '100%',
@@ -120,7 +150,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                 transition: 'transform 420ms cubic-bezier(0.32,0.72,0,1), opacity 420ms cubic-bezier(0,0,0.2,1)',
                 transformOrigin: 'center 110%',
                 willChange: 'transform, opacity',
-                cursor: isActive ? 'default' : 'pointer',
+                cursor: 'default',
               }}
             >
               <div
@@ -238,35 +268,6 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
             </div>
           );
         })}
-      </div>
-
-      {/* Nav */}
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:18, marginTop:28 }}>
-        <button
-          className="sarr"
-          onClick={() => goTo(active - 1)}
-          disabled={active === 0}
-          aria-label="Previous"
-        >
-          <ChevronLeft size={18} strokeWidth={1.3} />
-        </button>
-        <div style={{ display:'flex', gap:7, alignItems:'center' }}>
-          {items.map((_, i) => (
-            <div
-              key={i}
-              className={`sdot${i === active ? ' on' : ''}`}
-              onClick={() => goTo(i)}
-            />
-          ))}
-        </div>
-        <button
-          className="sarr"
-          onClick={() => goTo(active + 1)}
-          disabled={active === items.length - 1}
-          aria-label="Next"
-        >
-          <ChevronRight size={18} strokeWidth={1.3} />
-        </button>
       </div>
     </div>
   );
