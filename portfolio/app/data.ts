@@ -143,7 +143,7 @@ export const certifications: StackItem[] = [
     name: 'Microsoft Certified: DevOps Engineer Expert',
     accent: true,
     sub: 'Microsoft',
-    period: '2025',
+    period: 'Feb 2026',
     desc: 'Validates expertise in designing and implementing DevOps practices on Azure, including CI/CD, source control, infrastructure, and monitoring.',
     tech: ['Azure DevOps', 'GitHub Actions', 'CI/CD', 'Infrastructure as Code', 'Monitoring'],
     url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/8EA3B2152C8292E9?sharingId=6C0688093092B22D',
