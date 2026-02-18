@@ -49,10 +49,36 @@ const pv = {
 export default function PortfolioClient() {
   const [tab, setTab] = useState<Tab>('profile');
   const [isLinkedInInApp, setIsLinkedInInApp] = useState(false);
+  const [bottomUiOffset, setBottomUiOffset] = useState(0);
 
   useEffect(() => {
     const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-    setIsLinkedInInApp(/LinkedInApp|LIAPP|LinkedIn/i.test(ua));
+    const ref = typeof document !== 'undefined' ? document.referrer : '';
+    const linkedIn = /LinkedInApp|LIAPP|LinkedIn/i.test(ua) || /linkedin\./i.test(ref);
+    setIsLinkedInInApp(linkedIn);
+
+    const updateViewportOffsets = () => {
+      const vv = window.visualViewport;
+      const base = linkedIn ? 96 : 0;
+      if (!vv) {
+        setBottomUiOffset(base);
+        return;
+      }
+
+      const overlay = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+      setBottomUiOffset(Math.max(base, overlay + (linkedIn ? 14 : 0)));
+    };
+
+    updateViewportOffsets();
+    window.addEventListener('resize', updateViewportOffsets);
+    window.visualViewport?.addEventListener('resize', updateViewportOffsets);
+    window.visualViewport?.addEventListener('scroll', updateViewportOffsets);
+
+    return () => {
+      window.removeEventListener('resize', updateViewportOffsets);
+      window.visualViewport?.removeEventListener('resize', updateViewportOffsets);
+      window.visualViewport?.removeEventListener('scroll', updateViewportOffsets);
+    };
   }, []);
 
   return (
@@ -60,7 +86,7 @@ export default function PortfolioClient() {
       style={{
         minHeight: '100dvh',
         position: 'relative',
-        ['--dock-offset' as string]: isLinkedInInApp ? '96px' : '0px',
+        ['--dock-offset' as string]: `${bottomUiOffset}px`,
       }}
     >
       <Starfield />
@@ -97,7 +123,7 @@ export default function PortfolioClient() {
           position: 'relative',
           zIndex: 10,
           paddingTop: isLinkedInInApp ? 84 : 76,
-          paddingBottom: isLinkedInInApp ? 220 : 118,
+          paddingBottom: 118 + bottomUiOffset,
         }}
       >
         <AnimatePresence mode="wait">
@@ -112,8 +138,8 @@ export default function PortfolioClient() {
           position: 'fixed',
           left: 0,
           right: 0,
-          bottom: isLinkedInInApp ? 96 : 0,
-          zIndex: 40,
+          bottom: bottomUiOffset,
+          zIndex: 120,
           maxWidth: 560,
           margin: '0 auto',
           padding: tab === 'profile' ? '8px 22px 16px' : '12px 22px 16px',
