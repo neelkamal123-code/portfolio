@@ -10,7 +10,6 @@ import { ProjectsSection } from '@/components/ProjectsSection';
 import { SkillsSection } from '@/components/SkillsSection';
 import { CertificationsSection } from '@/components/CertificationsSection';
 import { LiquidPageDock } from '@/components/LiquidPageDock';
-import { InAppBrowserNotice } from '@/components/InAppBrowserNotice';
 
 type Tab = 'profile' | 'experience' | 'education' | 'projects' | 'skills' | 'certifications';
 
@@ -116,53 +115,6 @@ export default function PortfolioClient() {
       ))}
 
       <Nav activeTab={tab} onTabChange={t => setTab(t as Tab)} />
-      <InAppBrowserNotice />
-      {isLinkedInInApp && (
-        <div
-          style={{
-            position: 'fixed',
-            right: 10,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            zIndex: 130,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 6,
-            background: 'rgba(6,10,18,0.78)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            borderRadius: 14,
-            padding: 6,
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-          }}
-          aria-label="LinkedIn fallback navigation"
-        >
-          {tabs.map(t => {
-            const active = tab === t.id;
-            return (
-              <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                title={t.label}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 999,
-                  border: active ? '1px solid rgba(215,232,252,0.55)' : '1px solid rgba(255,255,255,0.15)',
-                  background: active ? 'rgba(215,232,252,0.12)' : 'transparent',
-                  color: active ? 'rgba(235,244,255,0.95)' : 'rgba(170,195,220,0.65)',
-                  fontSize: '.62rem',
-                  fontWeight: 600,
-                  letterSpacing: '.03em',
-                  cursor: 'pointer',
-                }}
-              >
-                {t.short}
-              </button>
-            );
-          })}
-        </div>
-      )}
 
       <main
         style={{
