@@ -52,11 +52,17 @@ export default function PortfolioClient() {
 
   useEffect(() => {
     const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-    setIsLinkedInInApp(/LinkedInApp|LIAPP/i.test(ua));
+    setIsLinkedInInApp(/LinkedInApp|LIAPP|LinkedIn/i.test(ua));
   }, []);
 
   return (
-    <div style={{ minHeight: '100dvh', position: 'relative' }}>
+    <div
+      style={{
+        minHeight: '100dvh',
+        position: 'relative',
+        ['--dock-offset' as string]: isLinkedInInApp ? '96px' : '0px',
+      }}
+    >
       <Starfield />
 
       {[
@@ -91,7 +97,7 @@ export default function PortfolioClient() {
           position: 'relative',
           zIndex: 10,
           paddingTop: isLinkedInInApp ? 84 : 76,
-          paddingBottom: isLinkedInInApp ? 150 : 118,
+          paddingBottom: isLinkedInInApp ? 220 : 118,
         }}
       >
         <AnimatePresence mode="wait">
@@ -106,12 +112,13 @@ export default function PortfolioClient() {
           position: 'fixed',
           left: 0,
           right: 0,
-          bottom: isLinkedInInApp ? 52 : 0,
-          zIndex: 20,
+          bottom: isLinkedInInApp ? 96 : 0,
+          zIndex: 40,
           maxWidth: 560,
           margin: '0 auto',
           padding: tab === 'profile' ? '8px 22px 16px' : '12px 22px 16px',
-          background: 'linear-gradient(to top, rgba(5,8,16,0.96) 50%, rgba(5,8,16,0))',
+          background: 'linear-gradient(to top, rgba(5,8,16,0.98) 62%, rgba(5,8,16,0))',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
         }}
