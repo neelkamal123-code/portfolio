@@ -50,7 +50,6 @@ const chipI = {
 export function CardStack({ label, items, extraButtons, showVisitButton = true }: CardStackProps) {
   const [active, setActive] = useState(0);
   const [panels, setPanels] = useState<Record<string, boolean>>({});
-  const [hasInteracted, setHasInteracted] = useState(false);
   const stackRef = useRef<HTMLDivElement>(null);
   const touchX = useRef(0);
   const touchY = useRef(0);
@@ -70,8 +69,10 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
     if (idx < 0 || idx >= items.length || idx === active) return;
     closeAllPanels();
     setActive(idx);
-    setHasInteracted(true);
   }, [active, items.length, closeAllPanels]);
+
+  const swipeHint = active === items.length - 1 ? 'Swipe right' : 'Swipe left';
+  const swipeHintX = active === items.length - 1 ? [0, -8, 0] : [0, 8, 0];
 
   const togglePanel = (idx: number, type: 'desc' | 'tech' | 'about') => {
     const keys = ['desc', 'tech', 'about'];
@@ -300,7 +301,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
           );
         })}
 
-        {!hasInteracted && items.length > 1 && (
+        {items.length > 1 && (
           <motion.div
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 0.95, y: 0 }}
@@ -315,8 +316,8 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
             }}
           >
             <motion.div
-              animate={{ x: [0, 8, 0, -8, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
+              animate={{ x: swipeHintX }}
+              transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
               style={{
                 fontSize: '.64rem',
                 letterSpacing: '.08em',
@@ -330,7 +331,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                 whiteSpace: 'nowrap',
               }}
             >
-              Swipe or scroll to browse
+              {swipeHint}
             </motion.div>
           </motion.div>
         )}
