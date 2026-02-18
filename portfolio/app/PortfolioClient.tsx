@@ -10,6 +10,7 @@ import { ProjectsSection } from '@/components/ProjectsSection';
 import { SkillsSection } from '@/components/SkillsSection';
 import { CertificationsSection } from '@/components/CertificationsSection';
 import { LiquidPageDock } from '@/components/LiquidPageDock';
+import { InAppBrowserNotice } from '@/components/InAppBrowserNotice';
 
 type Tab = 'profile' | 'experience' | 'education' | 'projects' | 'skills' | 'certifications';
 
@@ -77,6 +78,7 @@ export default function PortfolioClient() {
       ))}
 
       <Nav activeTab={tab} onTabChange={t => setTab(t as Tab)} />
+      <InAppBrowserNotice />
 
       <main style={{ position: 'relative', zIndex: 10, paddingTop: 76, paddingBottom: 80 }}>
         <AnimatePresence mode="wait">
