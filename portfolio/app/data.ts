@@ -123,17 +123,17 @@ export const projects: StackItem[] = [
     sourceUrl: 'https://github.com/neelkamal123-code/python-django-ecommerce',
     demoUrl: null,
   },
-    {
-    id: 'djangoecom',
-    name: 'Django E-commerce',
-    accent: true,
-    sub: 'Full-Stack Web Store',
-    period: 'Django · Python · SQLite',
-    desc: 'A Django-based e-commerce app with product catalog, cart management, customer auth, checkout-to-order flow, and admin CRUD support.',
-    tech: ['Python', 'Django', 'SQLite', 'Bootstrap', 'Pillow'],
-    sourceUrl: 'https://github.com/neelkamal123-code/python-django-ecommerce',
-    demoUrl: null,
-  },
+  {
+  id: 'pythonchatbot',
+  name: 'Python AI Chatbot',
+  accent: true,
+  sub: 'Local LLM Terminal Chat',
+  period: 'Python · LangChain · Ollama',
+  desc: 'A terminal-based AI chatbot built in Python with LangChain and Ollama, featuring session chat memory plus clear/exit commands for smooth local conversations.',
+  tech: ['Python', 'LangChain', 'Ollama', 'dotenv'],
+  sourceUrl: 'https://github.com/neelkamal123-code/python-chatbot',
+  demoUrl: null,
+},
 
 ];
 
