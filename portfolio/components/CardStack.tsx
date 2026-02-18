@@ -307,41 +307,43 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
           );
         })}
 
-        {items.length > 1 && (
+      </div>
+
+      {items.length > 1 && (
+        <motion.div
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 0.95, y: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: 8,
+            marginBottom: 4,
+            pointerEvents: 'none',
+            position: 'relative',
+            zIndex: 30,
+          }}
+        >
           <motion.div
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 0.95, y: 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
+            animate={{ x: swipeHintX }}
+            transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
             style={{
-              position: 'absolute',
-              bottom: 'calc(22px + var(--dock-offset, 0px))',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              pointerEvents: 'none',
-              zIndex: 30,
+              fontSize: '.64rem',
+              letterSpacing: '.08em',
+              textTransform: 'uppercase',
+              color: 'rgba(188,210,232,0.9)',
+              border: '1px solid rgba(148,190,232,0.28)',
+              borderRadius: 999,
+              padding: '7px 12px',
+              background: 'rgba(8,20,40,0.72)',
+              backdropFilter: 'blur(4px)',
+              whiteSpace: 'nowrap',
             }}
           >
-            <motion.div
-              animate={{ x: swipeHintX }}
-              transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
-              style={{
-                fontSize: '.64rem',
-                letterSpacing: '.08em',
-                textTransform: 'uppercase',
-                color: 'rgba(188,210,232,0.9)',
-                border: '1px solid rgba(148,190,232,0.28)',
-                borderRadius: 999,
-                padding: '7px 12px',
-                background: 'rgba(8,20,40,0.72)',
-                backdropFilter: 'blur(4px)',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {swipeHint}
-            </motion.div>
+            {swipeHint}
           </motion.div>
-        )}
-      </div>
+        </motion.div>
+      )}
 
       {items.length > 1 && (
         <div style={{ display: 'flex', gap: 7, alignItems: 'center', justifyContent: 'center', marginTop: 12 }}>
