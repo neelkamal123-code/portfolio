@@ -71,8 +71,8 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
     setActive(idx);
   }, [active, items.length, closeAllPanels]);
 
-  const swipeHint = active === items.length - 1 ? 'Swipe right' : 'Swipe left';
-  const swipeHintX = active === items.length - 1 ? [0, 8, 0] : [0, -8, 0];
+  const leftHintX = [0, -8, 0];
+  const rightHintX = [0, 8, 0];
   const isFirst = active === 0;
   const isLast = active === items.length - 1;
 
@@ -310,40 +310,142 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
         })}
 
         {items.length > 1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 0.95, y: 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            style={{
-              position: 'absolute',
-              top: isFirst ? 8 : 'auto',
-              left: isFirst ? 8 : isLast ? 'auto' : '50%',
-              right: isLast ? 8 : 'auto',
-              bottom: isFirst ? 'auto' : 'calc(18px + var(--dock-offset, 0px))',
-              transform: isFirst || isLast ? 'none' : 'translateX(-50%)',
-              pointerEvents: 'none',
-              zIndex: 30,
-            }}
-          >
-            <motion.div
-              animate={{ x: swipeHintX }}
-              transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
-              style={{
-                fontSize: '.64rem',
-                letterSpacing: '.08em',
-                textTransform: 'uppercase',
-                color: 'rgba(188,210,232,0.9)',
-                border: '1px solid rgba(148,190,232,0.28)',
-                borderRadius: 999,
-                padding: '7px 12px',
-                background: 'rgba(8,20,40,0.72)',
-                backdropFilter: 'blur(4px)',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {swipeHint}
-            </motion.div>
-          </motion.div>
+          <>
+            {isFirst && (
+              <motion.div
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 0.95, y: 0 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                style={{
+                  position: 'absolute',
+                  top: 8,
+                  left: 8,
+                  pointerEvents: 'none',
+                  zIndex: 30,
+                }}
+              >
+                <motion.div
+                  animate={{ x: leftHintX }}
+                  transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
+                  style={{
+                    fontSize: '.64rem',
+                    letterSpacing: '.08em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(188,210,232,0.9)',
+                    border: '1px solid rgba(148,190,232,0.28)',
+                    borderRadius: 999,
+                    padding: '7px 12px',
+                    background: 'rgba(8,20,40,0.72)',
+                    backdropFilter: 'blur(4px)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Swipe left
+                </motion.div>
+              </motion.div>
+            )}
+
+            {isLast && (
+              <motion.div
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 0.95, y: 0 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                style={{
+                  position: 'absolute',
+                  right: 8,
+                  bottom: 'calc(18px + var(--dock-offset, 0px))',
+                  pointerEvents: 'none',
+                  zIndex: 30,
+                }}
+              >
+                <motion.div
+                  animate={{ x: rightHintX }}
+                  transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
+                  style={{
+                    fontSize: '.64rem',
+                    letterSpacing: '.08em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(188,210,232,0.9)',
+                    border: '1px solid rgba(148,190,232,0.28)',
+                    borderRadius: 999,
+                    padding: '7px 12px',
+                    background: 'rgba(8,20,40,0.72)',
+                    backdropFilter: 'blur(4px)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Swipe right
+                </motion.div>
+              </motion.div>
+            )}
+
+            {!isFirst && !isLast && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 0.95, y: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  style={{
+                    position: 'absolute',
+                    left: 8,
+                    bottom: 'calc(18px + var(--dock-offset, 0px))',
+                    pointerEvents: 'none',
+                    zIndex: 30,
+                  }}
+                >
+                  <motion.div
+                  animate={{ x: leftHintX }}
+                  transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
+                  style={{
+                    fontSize: '.64rem',
+                    letterSpacing: '.08em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(188,210,232,0.9)',
+                    border: '1px solid rgba(148,190,232,0.28)',
+                    borderRadius: 999,
+                    padding: '7px 12px',
+                    background: 'rgba(8,20,40,0.72)',
+                    backdropFilter: 'blur(4px)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Swipe left
+                </motion.div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 0.95, y: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  style={{
+                    position: 'absolute',
+                    right: 8,
+                    bottom: 'calc(18px + var(--dock-offset, 0px))',
+                    pointerEvents: 'none',
+                    zIndex: 30,
+                  }}
+                >
+                  <motion.div
+                  animate={{ x: rightHintX }}
+                  transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
+                  style={{
+                    fontSize: '.64rem',
+                    letterSpacing: '.08em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(188,210,232,0.9)',
+                    border: '1px solid rgba(148,190,232,0.28)',
+                    borderRadius: 999,
+                    padding: '7px 12px',
+                    background: 'rgba(8,20,40,0.72)',
+                    backdropFilter: 'blur(4px)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Swipe right
+                </motion.div>
+                </motion.div>
+              </>
+            )}
+          </>
         )}
 
       </div>
