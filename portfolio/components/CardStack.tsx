@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackEvent } from '@/lib/analytics';
 
 export interface StackItem {
   id: string;
@@ -252,6 +253,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                           rel="noopener noreferrer"
                           className="pill"
                           style={{ textDecoration: 'none' }}
+                          onClick={() => trackEvent('visit_click', { section: label, item_id: item.id, item_name: item.name })}
                         >Visit ↗</a>
                       )}
                     </div>
@@ -460,3 +462,4 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
     </div>
   );
 }
+

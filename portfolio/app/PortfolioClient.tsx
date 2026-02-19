@@ -10,6 +10,7 @@ import { ProjectsSection } from '@/components/ProjectsSection';
 import { SkillsSection } from '@/components/SkillsSection';
 import { CertificationsSection } from '@/components/CertificationsSection';
 import { LiquidPageDock } from '@/components/LiquidPageDock';
+import { trackEvent } from '@/lib/analytics';
 
 type Tab = 'profile' | 'experience' | 'education' | 'projects' | 'skills' | 'certifications';
 
@@ -79,6 +80,10 @@ export default function PortfolioClient() {
       window.visualViewport?.removeEventListener('scroll', updateViewportOffsets);
     };
   }, []);
+
+  useEffect(() => {
+    trackEvent('section_view', { section: tab });
+  }, [tab]);
 
   return (
     <div

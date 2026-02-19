@@ -1,9 +1,11 @@
 'use client';
 
+import { useState, type FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Mail } from 'lucide-react';
 import { BuyMeACoffeeIcon } from './BuyMeACoffeeIcon';
 import { profile } from '@/app/data';
+import { trackEvent } from '@/lib/analytics';
 
 const container = {
   hidden: {},
@@ -15,6 +17,33 @@ const item = {
 };
 
 export function ProfileSection() {
+  const [showQuickMessage, setShowQuickMessage] = useState(false);
+  const [messageName, setMessageName] = useState('');
+  const [messageEmail, setMessageEmail] = useState('');
+  const [messageBody, setMessageBody] = useState('');
+
+  const onQuickMessageSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const trimmedName = messageName.trim() || 'Portfolio Visitor';
+    const trimmedEmail = messageEmail.trim() || 'Not provided';
+    const trimmedMessage = messageBody.trim();
+    if (!trimmedMessage) return;
+
+    const subject = encodeURIComponent(`Portfolio inquiry from ${trimmedName}`);
+    const body = encodeURIComponent(
+      `Name: ${trimmedName}\nEmail: ${trimmedEmail}\n\nMessage:\n${trimmedMessage}`
+    );
+
+    trackEvent('quick_message_submit', {
+      has_name: Boolean(messageName.trim()),
+      has_email: Boolean(messageEmail.trim()),
+      message_length: trimmedMessage.length,
+    });
+
+    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
+  };
+
   return (
     <motion.div
       variants={container}
@@ -71,15 +100,102 @@ export function ProfileSection() {
 
       {/* Actions */}
       <motion.div variants={item} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 24 }}>
-        <a href={profile.resumeUrl} download className="action-pill primary">
+        <a
+          href={profile.resumeUrl}
+          download
+          className="action-pill primary"
+          onClick={() => trackEvent('resume_download_click')}
+        >
           <Download size={13} strokeWidth={1.5} />
           Resume
         </a>
-        <a href={`mailto:${profile.email}`} className="action-pill primary">
+        <a
+          href={`mailto:${profile.email}`}
+          className="action-pill primary"
+          onClick={() => trackEvent('contact_click', { method: 'mailto' })}
+        >
           <Mail size={13} strokeWidth={1.5} />
           Contact
         </a>
+        <button
+          type="button"
+          className="action-pill primary"
+          onClick={() => {
+            const nextState = !showQuickMessage;
+            setShowQuickMessage(nextState);
+            trackEvent('quick_message_toggle', { open: nextState });
+          }}
+        >
+          Quick Message
+        </button>
       </motion.div>
+
+      {showQuickMessage && (
+        <motion.form
+          variants={item}
+          onSubmit={onQuickMessageSubmit}
+          style={{
+            display: 'grid',
+            gap: 10,
+            maxWidth: 380,
+            marginBottom: 22,
+            padding: '14px 12px',
+            borderRadius: 16,
+            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'rgba(255,255,255,0.02)',
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Your name"
+            value={messageName}
+            onChange={e => setMessageName(e.currentTarget.value)}
+            style={{
+              padding: '9px 11px',
+              borderRadius: 10,
+              border: '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(6,14,28,0.65)',
+              color: '#EAF3FF',
+              fontSize: '.8rem',
+            }}
+          />
+          <input
+            type="email"
+            placeholder="Your email"
+            value={messageEmail}
+            onChange={e => setMessageEmail(e.currentTarget.value)}
+            style={{
+              padding: '9px 11px',
+              borderRadius: 10,
+              border: '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(6,14,28,0.65)',
+              color: '#EAF3FF',
+              fontSize: '.8rem',
+            }}
+          />
+          <textarea
+            placeholder="Your message"
+            value={messageBody}
+            onChange={e => setMessageBody(e.currentTarget.value)}
+            rows={4}
+            required
+            style={{
+              resize: 'vertical',
+              minHeight: 92,
+              padding: '10px 11px',
+              borderRadius: 10,
+              border: '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(6,14,28,0.65)',
+              color: '#EAF3FF',
+              fontSize: '.82rem',
+              lineHeight: 1.45,
+            }}
+          />
+          <button type="submit" className="action-pill primary" style={{ width: 'fit-content' }}>
+            Send Message
+          </button>
+        </motion.form>
+      )}
 
       {/* Social */}
       <motion.div variants={item} style={{ display: 'flex', gap: 18 }}>
@@ -89,6 +205,7 @@ export function ProfileSection() {
             color: 'rgba(150,175,205,0.28)', textDecoration: 'none',
             transition: 'color .2s',
           }}
+          onClick={() => trackEvent('social_click', { platform: label })}
           onMouseEnter={e => (e.currentTarget.style.color = 'rgba(185,210,235,0.6)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(150,175,205,0.28)')}
           >
@@ -102,6 +219,7 @@ export function ProfileSection() {
           href={profile.buyMeACoffeeUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackEvent('coffee_click')}
           aria-label="Buy me a coffee"
           title="Buy me a coffee"
           style={{
