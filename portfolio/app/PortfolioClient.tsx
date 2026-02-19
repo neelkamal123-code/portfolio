@@ -23,15 +23,6 @@ const tabs: { id: Tab; label: string; short: string }[] = [
   { id: 'certifications', label: 'Certifications', short: 'CT' },
 ];
 
-const pages: Record<Tab, React.ReactNode> = {
-  profile: <ProfileSection />,
-  experience: <ExperienceSection />,
-  education: <EducationSection />,
-  projects: <ProjectsSection />,
-  skills: <SkillsSection />,
-  certifications: <CertificationsSection />,
-};
-
 const pv = {
   initial: { opacity: 0, y: 16 },
   enter: {
@@ -50,6 +41,21 @@ export default function PortfolioClient() {
   const [tab, setTab] = useState<Tab>('profile');
   const [isLinkedInInApp, setIsLinkedInInApp] = useState(false);
   const [bottomUiOffset, setBottomUiOffset] = useState(0);
+  const [globalQuery, setGlobalQuery] = useState('');
+
+  const isSearchTab = tab === 'projects' || tab === 'certifications';
+  const searchPlaceholder = tab === 'projects'
+    ? 'Search projects by name, tech, or description'
+    : 'Search certifications by name, issuer, or skills';
+
+  const pages: Record<Tab, React.ReactNode> = {
+    profile: <ProfileSection />,
+    experience: <ExperienceSection />,
+    education: <EducationSection />,
+    projects: <ProjectsSection query={globalQuery} />,
+    skills: <SkillsSection />,
+    certifications: <CertificationsSection query={globalQuery} />,
+  };
 
   useEffect(() => {
     const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
@@ -129,6 +135,51 @@ export default function PortfolioClient() {
           paddingBottom: 118 + bottomUiOffset,
         }}
       >
+        {isSearchTab && (
+          <div style={{ width: '100%', maxWidth: 520, margin: '0 auto', padding: '0 22px 14px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                borderRadius: 14,
+                border: '1px solid rgba(194,219,245,0.16)',
+                background: 'rgba(8,18,34,0.62)',
+                padding: '10px 12px',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+            >
+              <input
+                type="text"
+                value={globalQuery}
+                onChange={e => setGlobalQuery(e.currentTarget.value)}
+                placeholder={searchPlaceholder}
+                aria-label="Search projects and certifications"
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  color: '#E8F2FE',
+                  fontSize: '.82rem',
+                  letterSpacing: '.01em',
+                }}
+              />
+              {globalQuery && (
+                <button
+                  type="button"
+                  className="pill"
+                  onClick={() => setGlobalQuery('')}
+                  style={{ padding: '5px 11px', letterSpacing: '.06em' }}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         <AnimatePresence mode="wait">
           <motion.div key={tab} variants={pv} initial="initial" animate="enter" exit="exit">
             {pages[tab]}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from '@/lib/analytics';
 
@@ -88,6 +88,19 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
       return next;
     });
   };
+
+  useEffect(() => {
+    if (items.length === 0) {
+      if (active !== 0) setActive(0);
+      setPanels({});
+      return;
+    }
+
+    if (active > items.length - 1) {
+      setActive(items.length - 1);
+      setPanels({});
+    }
+  }, [items.length, active]);
 
   return (
     <div style={{ width: '100%', maxWidth: 520, margin: '0 auto', padding: '0 22px' }}>
