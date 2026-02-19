@@ -11,7 +11,7 @@ export function ProjectsSection() {
         extraButtons={(item) => (
           <>
             {item.sourceUrl && (
-              <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="pill">Source</a>
+              <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="pill">{'Source \u2197'}</a>
             )}
           </>
         )}

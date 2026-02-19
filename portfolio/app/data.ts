@@ -137,7 +137,18 @@ export const projects: StackItem[] = [
   tech: ['Python', 'LangChain', 'Ollama', 'dotenv'],
   sourceUrl: 'https://github.com/neelkamal123-code/python-chatbot',
   demoUrl: null,
-},
+  },
+  {
+    id: 'bytesbrain',
+    name: 'BytesBrain',
+    accent: true,
+    sub: 'Python Face Recognition Attendance + Smart Whiteboard',
+    period: '2021',
+    desc: 'Built during a hackathon, BytesBrain combines live face-recognition attendance with a hand-controlled virtual whiteboard. The system recognizes students from a camera feed, logs attendance automatically, supports quick quiz launch, and exports attendance to an Excel file.',
+    tech: ['Python', 'Face Recognition', 'OpenCV', 'NumPy', 'Tkinter', 'Excel Export'],
+    sourceUrl: 'https://github.com/neelkamal123-code/CIS-HACK/tree/main',
+    demoUrl: 'https://drive.google.com/file/d/1Uu13LYEFEUq6g1xuglFiWwmY13qUACz2/view',
+  },
 
 ];
 
@@ -201,6 +212,16 @@ export const certifications: StackItem[] = [
     desc: 'Training and certification covering Java, J2EE architecture, servlets, JSP, and enterprise application development concepts.',
     tech: ['Java', 'J2EE', 'Servlets', 'JSP'],
     url: 'https://drive.google.com/file/d/1lGtgtOTIn0Z1DHG78UMMeA9NZFc3Sp44/view?usp=sharing',
+  },
+  {
+    id: 'cis-hackathon-2021',
+    name: 'Code Innovation Series Hackathon - Certificate of Participation',
+    accent: true,
+    sub: 'GitHub x IncubateIND',
+    period: 'May 2021',
+    desc: 'Participated in the Code Innovation Series Hackathon and built BytesBrain, a Python-based face-recognition attendance system with a smart whiteboard and quiz-assist workflow for classroom sessions.',
+    tech: ['Hackathon', 'Python', 'Face Recognition', 'OpenCV', 'Innovation'],
+    url: 'https://drive.google.com/file/d/1u0mtGnk23LkZPW2sj1weB6nKu34YChpC/view?usp=sharing',
   },
 ];
 
