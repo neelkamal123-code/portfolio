@@ -26,6 +26,10 @@ export function LiquidPageDock({
   const lastWheelAt = useRef(0);
 
   const activeIndex = tabs.findIndex(t => t.id === activeTab);
+  const isFirst = activeIndex === 0;
+  const isLast = activeIndex === tabs.length - 1;
+  const edgeArrow = isFirst ? '\u2190' : isLast ? '\u2192' : '';
+  const edgeArrowX = isFirst ? [0, -8, 0] : isLast ? [0, 8, 0] : [0, 0, 0];
 
   const goByDelta = (delta: -1 | 1) => {
     if (activeIndex < 0) return;
@@ -129,6 +133,17 @@ export function LiquidPageDock({
           );
         })}
       </motion.div>
+      <div className="liquid-edge-arrow" aria-hidden="true">
+        {edgeArrow && (
+          <motion.span
+            className="liquid-edge-arrow-glyph"
+            animate={{ x: edgeArrowX }}
+            transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.55, ease: 'easeInOut' }}
+          >
+            {edgeArrow}
+          </motion.span>
+        )}
+      </div>
     </div>
   );
 }

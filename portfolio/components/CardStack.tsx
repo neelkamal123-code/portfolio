@@ -340,7 +340,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  Swipe left
+                  Swipe ←
                 </motion.div>
               </motion.div>
             )}
@@ -374,7 +374,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  Swipe right
+                  Swipe →
                 </motion.div>
               </motion.div>
             )}
@@ -409,7 +409,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  Swipe left
+                  Swipe ←
                 </motion.div>
                 </motion.div>
                 <motion.div
@@ -440,7 +440,7 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  Swipe right
+                  Swipe →
                 </motion.div>
                 </motion.div>
               </>

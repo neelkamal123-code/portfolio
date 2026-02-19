@@ -219,3 +219,16 @@ body {
   background: #86efac;
   box-shadow: 0 0 8px rgba(134, 239, 172, 0.5);
 }
+.liquid-edge-arrow {
+  height: 14px;
+  margin-top: 6px;
+  text-align: center;
+  font-size: 0.86rem;
+  line-height: 14px;
+  color: rgba(175, 198, 222, 0.72);
+  user-select: none;
+  pointer-events: none;
+}
+.liquid-edge-arrow-glyph {
+  display: inline-block;
+}
