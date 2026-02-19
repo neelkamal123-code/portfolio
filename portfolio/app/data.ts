@@ -57,6 +57,7 @@ export const education: StackItem[] = [
     sub: 'Bachelor of Technology (B.Tech)',
     period: 'May 2019 — 2023',
     desc: 'Pursuing B.Tech with focus on software engineering, data structures, and application development. Actively involved in building real-world projects and strengthening problem-solving skills.',
+    url: 'https://mait.ac.in/',
     tech: ['Data Structures', 'OOP', 'DBMS', 'Software Engineering']
   },
   {
@@ -66,6 +67,7 @@ export const education: StackItem[] = [
     sub: 'Class XII',
     period: 'May 2018 — May 2019',
     desc: 'Completed senior secondary education.',
+    url: 'https://apsshankarvihar.ac.in/',
     tech: []
   },
   {
@@ -75,6 +77,7 @@ export const education: StackItem[] = [
     sub: 'Class X',
     period: 'May 2016 — May 2017',
     desc: 'Completed secondary education.',
+    url: 'https://apsshankarvihar.ac.in/',
     tech: []
   }
 ];
