@@ -205,7 +205,7 @@ export default function PortfolioClient() {
       >
         <LiquidPageDock tabs={tabs} activeTab={tab} onTabChange={t => setTab(t as Tab)} />
         <div style={{ height: 1, background: 'rgba(255,255,255,0.04)', marginBottom: 14 }} />
-        <p style={{ fontSize: '.66rem', fontWeight: 300, color: 'rgba(138,165,198,0.17)', letterSpacing: '.035em' }}>
+        <p style={{ fontSize: '.66rem', fontWeight: 500, color: 'rgba(138,165,198,0.17)', letterSpacing: '.035em' }}>
           Neel Kamal - {new Date().getFullYear()}
         </p>
       </footer>

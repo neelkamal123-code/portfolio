@@ -278,7 +278,7 @@ export function ProfileSection() {
       <motion.div variants={item} style={{ display: 'flex', gap: 18 }}>
         {[['GitHub', profile.github], ['LinkedIn', profile.linkedin]].map(([label, url]) => (
           <a key={label} href={url} target="_blank" rel="noopener noreferrer" style={{
-            fontSize: '.72rem', fontWeight: 300, letterSpacing: '.06em',
+            fontSize: '.72rem', fontWeight: 600, letterSpacing: '.06em',
             color: 'rgba(150,175,205,0.28)', textDecoration: 'none',
             transition: 'color .2s',
           }}
