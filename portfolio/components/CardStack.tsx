@@ -22,6 +22,7 @@ interface CardStackProps {
   label: string;
   items: StackItem[];
   extraButtons?: (item: StackItem) => React.ReactNode;
+  subAdornment?: (item: StackItem) => React.ReactNode;
   showVisitButton?: boolean;
 }
 
@@ -48,7 +49,7 @@ const chipI = {
   show:   { opacity: 1, y: 0, transition: { duration: 0.26, ease: [0,0,0.2,1] as [number,number,number,number] } },
 };
 
-export function CardStack({ label, items, extraButtons, showVisitButton = true }: CardStackProps) {
+export function CardStack({ label, items, extraButtons, subAdornment, showVisitButton = true }: CardStackProps) {
   const [active, setActive] = useState(0);
   const [panels, setPanels] = useState<Record<string, boolean>>({});
   const stackRef = useRef<HTMLDivElement>(null);
@@ -235,6 +236,11 @@ export function CardStack({ label, items, extraButtons, showVisitButton = true }
                       <span style={{ fontSize:'.72rem', fontWeight:500, letterSpacing:'.13em', textTransform:'uppercase', color:'rgba(188,210,232,0.58)' }}>{item.sub}</span>
                       <div style={{ flex:1, height:1, background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent)' }} />
                     </div>
+                    {subAdornment && (
+                      <div style={{ display: 'flex', justifyContent: 'center', margin: '6px 0 3px' }}>
+                        {subAdornment(item)}
+                      </div>
+                    )}
                     <p style={{ fontSize:'.68rem', fontWeight:300, letterSpacing:'.08em', textTransform:'uppercase', color:'rgba(155,183,212,0.34)', textAlign:'center' }}>{item.period}</p>
                     <div style={{ height:1, margin:'22px 0', background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.06) 20%,rgba(255,255,255,0.12) 50%,rgba(255,255,255,0.06) 80%,transparent)' }} />
 
