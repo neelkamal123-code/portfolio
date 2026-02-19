@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Mail } from 'lucide-react';
+import { Check, Copy, Download, Mail } from 'lucide-react';
 import { BuyMeACoffeeIcon } from './BuyMeACoffeeIcon';
 import { profile } from '@/app/data';
 import { trackEvent } from '@/lib/analytics';
@@ -21,6 +21,31 @@ export function ProfileSection() {
   const [messageName, setMessageName] = useState('');
   const [messageEmail, setMessageEmail] = useState('');
   const [messageBody, setMessageBody] = useState('');
+  const [copiedToEmail, setCopiedToEmail] = useState(false);
+
+  const copyToEmail = async () => {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(profile.email);
+      } else if (typeof document !== 'undefined') {
+        const temp = document.createElement('textarea');
+        temp.value = profile.email;
+        temp.setAttribute('readonly', '');
+        temp.style.position = 'absolute';
+        temp.style.left = '-9999px';
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+      }
+
+      setCopiedToEmail(true);
+      trackEvent('quick_message_to_copy');
+      window.setTimeout(() => setCopiedToEmail(false), 1400);
+    } catch {
+      setCopiedToEmail(false);
+    }
+  };
 
   const onQuickMessageSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,10 +55,15 @@ export function ProfileSection() {
     const trimmedMessage = messageBody.trim();
     if (!trimmedMessage) return;
 
-    const subject = encodeURIComponent(`Portfolio inquiry from ${trimmedName}`);
-    const body = encodeURIComponent(
+    const subjectText = `Portfolio inquiry from ${trimmedName}`;
+    const bodyText =
       `Name: ${trimmedName}\nEmail: ${trimmedEmail}\n\nMessage:\n${trimmedMessage}`
-    );
+    ;
+    const subject = encodeURIComponent(subjectText);
+    const body = encodeURIComponent(bodyText);
+    const mailtoUrl = `mailto:${profile.email}?subject=${subject}&body=${body}`;
+    const browserComposeUrl =
+      `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(profile.email)}&su=${subject}&body=${body}`;
 
     trackEvent('quick_message_submit', {
       has_name: Boolean(messageName.trim()),
@@ -41,7 +71,24 @@ export function ProfileSection() {
       message_length: trimmedMessage.length,
     });
 
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
+    let fallbackCancelled = false;
+    const cancelFallback = () => {
+      fallbackCancelled = true;
+      window.removeEventListener('blur', cancelFallback);
+      window.removeEventListener('pagehide', cancelFallback);
+    };
+
+    window.addEventListener('blur', cancelFallback, { once: true });
+    window.addEventListener('pagehide', cancelFallback, { once: true });
+
+    window.setTimeout(() => {
+      if (fallbackCancelled) return;
+      trackEvent('quick_message_browser_fallback', { provider: 'gmail' });
+      window.open(browserComposeUrl, '_blank', 'noopener,noreferrer');
+      cancelFallback();
+    }, 1400);
+
+    window.location.href = mailtoUrl;
   };
 
   return (
@@ -145,6 +192,36 @@ export function ProfileSection() {
             background: 'rgba(255,255,255,0.02)',
           }}
         >
+          <div style={{ display: 'grid', gap: 6 }}>
+            <span style={{ fontSize: '.7rem', letterSpacing: '.05em', color: 'rgba(178,200,226,0.56)' }}>To</span>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input
+                type="text"
+                readOnly
+                value={profile.email}
+                aria-label="Recipient email"
+                style={{
+                  flex: 1,
+                  padding: '9px 11px',
+                  borderRadius: 10,
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  background: 'rgba(6,14,28,0.65)',
+                  color: '#EAF3FF',
+                  fontSize: '.8rem',
+                }}
+              />
+              <button
+                type="button"
+                className="action-pill primary"
+                onClick={copyToEmail}
+                style={{ minWidth: 84, justifyContent: 'center' }}
+              >
+                {copiedToEmail ? <Check size={13} strokeWidth={1.7} /> : <Copy size={13} strokeWidth={1.7} />}
+                {copiedToEmail ? 'Copied' : 'Copy'}
+              </button>
+            </div>
+          </div>
+
           <input
             type="text"
             placeholder="Your name"
