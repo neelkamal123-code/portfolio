@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Download, Mail } from 'lucide-react';
+import { BuyMeACoffeeIcon } from './BuyMeACoffeeIcon';
 import { profile } from '@/app/data';
 
 const container = {
@@ -95,6 +96,35 @@ export function ProfileSection() {
           </a>
         ))}
       </motion.div>
+
+      {profile.buyMeACoffeeUrl && (
+        <motion.a
+          href={profile.buyMeACoffeeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Buy me a coffee"
+          title="Buy me a coffee"
+          style={{
+            position: 'fixed',
+            right: 18,
+            bottom: 'calc(120px + var(--dock-offset, 0px))',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            textDecoration: 'none',
+            lineHeight: 0,
+            zIndex: 130,
+          }}
+          animate={{ y: [0, -7, 0], x: [0, 2, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 0.2, ease: 'easeInOut' }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.94 }}
+        >
+          <BuyMeACoffeeIcon size={30} />
+        </motion.a>
+      )}
     </motion.div>
   );
 }

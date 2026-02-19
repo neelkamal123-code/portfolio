@@ -8,6 +8,7 @@ export const profile = {
   github: 'https://github.com/neelkamal123-code',
   linkedin: 'https://www.linkedin.com/in/neelpunia/',
   resumeUrl: '/Neel_s_Resume_2026_1.pdf',
+  buyMeACoffeeUrl: 'https://buymeacoffee.com/neelkamalpunia',
 };
 
 export const experience: StackItem[] = [
