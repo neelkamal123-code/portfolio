@@ -2,8 +2,9 @@
 'use client';
 
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import * as THREE from "three";
 import { Award, Box, BriefcaseBusiness, Building2, ChevronDown, Download, ExternalLink, Github, GraduationCap, Heart, Linkedin, Link2, Mail, MapPin, Moon, Search, Sun, Sparkles } from 'lucide-react';
 import { certifications, education, experience, profile, projects, skills } from "@/app/data";
 import { trackEvent } from "@/lib/analytics";
@@ -280,11 +281,37 @@ export default function PortfolioClient() {
     const [projectQuery, setProjectQuery] = useState("");
     const [certQuery, setCertQuery] = useState("");
     const [visibleProjects, setVisibleProjects] = useState(4);
+    const [visibleCertifications, setVisibleCertifications] = useState(5);
     const [avatarFrameIndex, setAvatarFrameIndex] = useState(0);
     const [failedLogos, setFailedLogos] = useState({});
     const [openProjects, setOpenProjects] = useState({});
     const [openExperience, setOpenExperience] = useState({});
     const [openEducation, setOpenEducation] = useState({});
+    const heroCanvasRef = useRef(null);
+    const profileTiltX = useMotionValue(0);
+    const profileTiltY = useMotionValue(0);
+    const profileGlareX = useMotionValue(50);
+    const profileGlareY = useMotionValue(0);
+    const smoothTiltX = useSpring(profileTiltX, {
+        stiffness: 190,
+        damping: 24,
+        mass: 0.6
+    });
+    const smoothTiltY = useSpring(profileTiltY, {
+        stiffness: 190,
+        damping: 24,
+        mass: 0.6
+    });
+    const smoothGlareX = useSpring(profileGlareX, {
+        stiffness: 130,
+        damping: 18,
+        mass: 0.5
+    });
+    const smoothGlareY = useSpring(profileGlareY, {
+        stiffness: 130,
+        damping: 18,
+        mass: 0.5
+    });
     const filteredProjects = useMemo(()=>filterByQuery(projects, projectQuery), [
         projectQuery
     ]);
@@ -293,6 +320,8 @@ export default function PortfolioClient() {
     const filteredCertifications = useMemo(()=>filterByQuery(certifications, certQuery), [
         certQuery
     ]);
+    const certificationsToRender = certQuery.trim() ? filteredCertifications : filteredCertifications.slice(0, visibleCertifications);
+    const canShowMoreCertifications = !certQuery.trim() && visibleCertifications < filteredCertifications.length;
     useEffect(()=>{
         const stored = resolveInitialTheme();
         setTheme(stored);
@@ -310,6 +339,146 @@ export default function PortfolioClient() {
         }, 1200);
         return ()=>clearInterval(interval);
     }, []);
+    useEffect(()=>{
+        const canvas = heroCanvasRef.current;
+        if (!canvas || typeof window === "undefined") return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 40);
+        camera.position.set(0, 0, 5.8);
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            antialias: true,
+            alpha: true,
+            powerPreference: "high-performance"
+        });
+        renderer.setClearColor(0x000000, 0);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.05;
+        const group = new THREE.Group();
+        scene.add(group);
+        const coreGeometry = new THREE.IcosahedronGeometry(1.08, 12);
+        const coreMaterial = new THREE.MeshPhysicalMaterial({
+            color: theme === "dark" ? 0xc7d9ff : 0x607aa7,
+            metalness: 0.3,
+            roughness: 0.32,
+            clearcoat: 1,
+            clearcoatRoughness: 0.16,
+            transparent: true,
+            opacity: 0.8,
+            transmission: 0.35,
+            thickness: 0.7,
+            ior: 1.25
+        });
+        const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
+        group.add(coreMesh);
+        const wireGeometry = new THREE.IcosahedronGeometry(1.32, 3);
+        const wireMaterial = new THREE.MeshBasicMaterial({
+            color: theme === "dark" ? 0xd8e7ff : 0x6f82a4,
+            wireframe: true,
+            transparent: true,
+            opacity: theme === "dark" ? 0.22 : 0.26
+        });
+        const wireMesh = new THREE.Mesh(wireGeometry, wireMaterial);
+        group.add(wireMesh);
+        const particleCount = 160;
+        const particlePositions = new Float32Array(particleCount * 3);
+        for(let i = 0; i < particleCount; i += 1){
+            const radius = 2 + Math.random() * 0.9;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+            particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+            particlePositions[i * 3 + 2] = radius * Math.cos(phi);
+        }
+        const particleGeometry = new THREE.BufferGeometry();
+        particleGeometry.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3));
+        const particleMaterial = new THREE.PointsMaterial({
+            color: theme === "dark" ? 0xe4eeff : 0x667d9f,
+            size: 0.034,
+            transparent: true,
+            opacity: theme === "dark" ? 0.5 : 0.44,
+            sizeAttenuation: true
+        });
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+        const ambientLight = new THREE.AmbientLight(theme === "dark" ? 0xa8bddf : 0x90a2c0, 0.64);
+        const keyLight = new THREE.DirectionalLight(theme === "dark" ? 0xffffff : 0xe7eefc, 1.14);
+        keyLight.position.set(2.2, 2.8, 3.2);
+        const fillLight = new THREE.PointLight(theme === "dark" ? 0x8ea9d5 : 0x889dc0, 1.2, 14, 2);
+        fillLight.position.set(-2.5, -1.6, 2);
+        scene.add(ambientLight, keyLight, fillLight);
+        const pointer = new THREE.Vector2(0, 0);
+        const pointerTarget = new THREE.Vector2(0, 0);
+        let frameId = 0;
+        const clock = new THREE.Clock();
+        const resize = ()=>{
+            const parent = canvas.parentElement;
+            const width = parent?.clientWidth || canvas.clientWidth || 1;
+            const height = parent?.clientHeight || canvas.clientHeight || 1;
+            renderer.setSize(width, height, false);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        };
+        const onPointerMove = (event)=>{
+            const rect = canvas.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+            pointerTarget.set(x * 0.95, y * 0.75);
+        };
+        const onPointerLeave = ()=>{
+            pointerTarget.set(0, 0);
+        };
+        const render = ()=>{
+            const t = clock.getElapsedTime();
+            pointer.lerp(pointerTarget, 0.05);
+            group.rotation.y = t * 0.2 + pointer.x * 0.35;
+            group.rotation.x = Math.sin(t * 0.42) * 0.08 + pointer.y * 0.25;
+            wireMesh.rotation.x = -t * 0.16;
+            wireMesh.rotation.y = t * 0.21;
+            particles.rotation.y = t * 0.03;
+            particles.rotation.x = -t * 0.02;
+            renderer.render(scene, camera);
+            frameId = window.requestAnimationFrame(render);
+        };
+        resize();
+        render();
+        window.addEventListener("resize", resize);
+        window.addEventListener("pointermove", onPointerMove, {
+            passive: true
+        });
+        window.addEventListener("pointerleave", onPointerLeave);
+        return ()=>{
+            window.cancelAnimationFrame(frameId);
+            window.removeEventListener("resize", resize);
+            window.removeEventListener("pointermove", onPointerMove);
+            window.removeEventListener("pointerleave", onPointerLeave);
+            coreGeometry.dispose();
+            coreMaterial.dispose();
+            wireGeometry.dispose();
+            wireMaterial.dispose();
+            particleGeometry.dispose();
+            particleMaterial.dispose();
+            renderer.dispose();
+        };
+    }, [theme]);
+    const handleProfilePointerMove = (event)=>{
+        const rect = event.currentTarget.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width;
+        const py = (event.clientY - rect.top) / rect.height;
+        profileTiltX.set((0.5 - py) * 8);
+        profileTiltY.set((px - 0.5) * 11);
+        profileGlareX.set(px * 100);
+        profileGlareY.set(py * 100);
+    };
+    const resetProfileTilt = ()=>{
+        profileTiltX.set(0);
+        profileTiltY.set(0);
+        profileGlareX.set(50);
+        profileGlareY.set(0);
+    };
     const currentAvatarFrame = avatarFrames[avatarFrameIndex];
     return /*#__PURE__*/ _jsxs("div", {
         className: "portfolio-shell",
@@ -394,9 +563,27 @@ export default function PortfolioClient() {
                 children: [
                     /*#__PURE__*/ _jsxs(motion.section, {
                         id: "profile",
-                        className: "frame profile-frame",
+                        className: "frame profile-frame tilt-card depth-card",
+                        onPointerMove: handleProfilePointerMove,
+                        onPointerLeave: resetProfileTilt,
+                        onPointerCancel: resetProfileTilt,
+                        style: {
+                            rotateX: smoothTiltX,
+                            rotateY: smoothTiltY,
+                            transformPerspective: 1400,
+                            "--card-glare-x": smoothGlareX,
+                            "--card-glare-y": smoothGlareY
+                        },
                         ...reveal,
                         children: [
+                            /*#__PURE__*/ _jsx("div", {
+                                className: "hero-webgl-layer",
+                                "aria-hidden": "true",
+                                children: /*#__PURE__*/ _jsx("canvas", {
+                                    ref: heroCanvasRef,
+                                    className: "hero-webgl"
+                                })
+                            }),
                             /*#__PURE__*/ _jsx("div", {
                                 className: "avatar-box",
                                 children: /*#__PURE__*/ _jsxs("div", {
@@ -525,7 +712,7 @@ export default function PortfolioClient() {
                         ]
                     }),
                     /*#__PURE__*/ _jsxs(motion.section, {
-                        className: "frame info-frame",
+                        className: "frame info-frame depth-card",
                         ...reveal,
                         children: [
                             /*#__PURE__*/ _jsxs("div", {
@@ -747,7 +934,7 @@ export default function PortfolioClient() {
                                     const isOpen = Boolean(openProjects[item.id]);
                                     const highlights = getProjectHighlights(item);
                                     return /*#__PURE__*/ _jsxs("article", {
-                                        className: `project-item${isOpen ? " open" : ""}`,
+                                        className: `project-item depth-card${isOpen ? " open" : ""}`,
                                         children: [
                                             /*#__PURE__*/ _jsxs("div", {
                                                 className: "project-summary",
@@ -914,7 +1101,7 @@ export default function PortfolioClient() {
                                 children: experience.map((item)=>{
                                     const isOpen = Boolean(openExperience[item.id]);
                                     return /*#__PURE__*/ _jsxs("article", {
-                                        className: `timeline-item collapsible${isOpen ? " open" : ""}`,
+                                        className: `timeline-item collapsible depth-card${isOpen ? " open" : ""}`,
                                         children: [
                                             /*#__PURE__*/ _jsxs("div", {
                                                 className: "timeline-summary",
@@ -1008,7 +1195,7 @@ export default function PortfolioClient() {
                                 children: education.map((item)=>{
                                     const isOpen = Boolean(openEducation[item.id]);
                                     return /*#__PURE__*/ _jsxs("article", {
-                                        className: `timeline-item collapsible${isOpen ? " open" : ""}`,
+                                        className: `timeline-item collapsible depth-card${isOpen ? " open" : ""}`,
                                         children: [
                                             /*#__PURE__*/ _jsxs("div", {
                                                 className: "timeline-summary",
@@ -1169,8 +1356,8 @@ export default function PortfolioClient() {
                             }),
                             /*#__PURE__*/ _jsx("div", {
                                 className: "timeline",
-                                children: filteredCertifications.map((item)=>/*#__PURE__*/ _jsxs("article", {
-                                        className: "timeline-item",
+                                children: certificationsToRender.map((item)=>/*#__PURE__*/ _jsxs("article", {
+                                        className: "timeline-item depth-card",
                                         children: [
                                             /*#__PURE__*/ _jsx("span", {
                                                 className: "timeline-icon",
@@ -1222,6 +1409,17 @@ export default function PortfolioClient() {
                                             })
                                         ]
                                     }, item.id))
+                            }),
+                            canShowMoreCertifications && /*#__PURE__*/ _jsxs("button", {
+                                type: "button",
+                                className: "show-more",
+                                onClick: ()=>setVisibleCertifications((previous)=>previous + 2),
+                                children: [
+                                    "Show More ",
+                                    /*#__PURE__*/ _jsx(ChevronDown, {
+                                        size: 16
+                                    })
+                                ]
                             })
                         ]
                     })
