@@ -232,6 +232,7 @@ export const skills = [
   { name: 'REST APIs & Backend Development', level: 88 },
   { name: 'SQL Server / DBMS', level: 82 },
   { name: 'Flutter & Dart', level: 80 },
+  { name: 'LLM Engineering', level: 83 },
   { name: 'Python', level: 75 },
   { name: 'Microservices Architecture', level: 78 },
   { name: 'Docker / Kubernetes (Basics)', level: 70 },
