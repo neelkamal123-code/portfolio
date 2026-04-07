@@ -139,6 +139,17 @@ export const projects: StackItem[] = [
   demoUrl: null,
   },
   {
+    id: 'react-movie-project',
+    name: 'React Movie Project',
+    accent: true,
+    sub: 'React · Vite · TMDB API',
+    period: 'React Router · Context API · localStorage',
+    desc: 'A beginner-friendly movie discovery app that shows popular TMDB movies, supports title-based search, and lets users add or remove favorites with persistence in localStorage.',
+    tech: ['React', 'Vite', 'React Router', 'Context API', 'TMDB API', 'localStorage'],
+    sourceUrl: 'https://github.com/neelkamal123-code/React_Movie_Project',
+    demoUrl: null,
+  },
+  {
     id: 'bytesbrain',
     name: 'BytesBrain',
     accent: true,

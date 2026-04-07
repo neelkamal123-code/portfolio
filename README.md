@@ -11,8 +11,8 @@
 
 ---
 
-## 🚀 About Me
 
+## 🚀 About Me
 Software Engineer II at Deloitte specializing in **.NET Core**, **Azure Cloud**, and enterprise application development within the Tax Transformation Office.
 
 - 🔭 Building scalable backend systems & secure APIs  
@@ -70,6 +70,8 @@ Modern personal portfolio built using Next.js & TypeScript.
 **Tech:** Next.js · React · TypeScript · Tailwind  
 **Repo:** https://github.com/neelkamal123-code/portfolio  
 
+
+
 ---
 
 ## 📊 GitHub Stats
@@ -97,3 +99,5 @@ Modern personal portfolio built using Next.js & TypeScript.
 ⭐️ *If you like my work, consider giving a star to my repositories!*
 
 </div>
+
+
