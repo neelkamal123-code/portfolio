@@ -164,6 +164,16 @@ export const projects: StackItem[] = [
 ];
 
 export const certifications: StackItem[] = [
+  {
+    id: 'copilot',
+    name: 'GitHub Copilot',
+    accent: true,
+    sub: 'Microsoft',
+    period: '2026',
+    desc: 'Certificate for GitHub Copilot issued by Microsoft.',
+    tech: ['GitHub Copilot', 'AI Pair Programming'],
+    url: 'https://learn.microsoft.com/api/credentials/share/en-us/NeelKamal-6249/409F3E814CDAA07C?sharingId=6C0688093092B22D',
+  },
     {
     id: 'az400',
     name: 'Microsoft Certified: DevOps Engineer Expert',
